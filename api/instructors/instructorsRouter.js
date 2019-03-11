@@ -51,4 +51,20 @@ router.get('/', (req, res) => {
         })
 });
 
-module.exports = router
+router.get('/:id', (req, res) => {
+    const id = req.params.id
+    Instructors.getById(id)
+        .then(instructor => {
+            const { username, name, email, bio } = instructor;
+            Instructors.getClasses(id)
+                .then(classes => {
+                    res.status(200).json({ username, name, email, bio, classes })
+                })            
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not get instructors' })
+        })
+});
+
+module.exports = router;

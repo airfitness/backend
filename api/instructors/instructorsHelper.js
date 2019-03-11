@@ -1,12 +1,11 @@
 const db = require('../../data/dbConfig');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 module.exports = {
     register,
     login,
     getInstructors,
-    // getUserById
+    getById,
+    getClasses
 }
 
 async function register(instructor){
@@ -19,9 +18,15 @@ function getInstructors(){
 }
 
 function login(username) {
-
     return db('instructors')
         .where({ username })
         .first()
+}
 
+function getById(id){
+    return db('instructors').where({id}).first();
+}
+
+function getClasses(id){
+    return db('classes').where({ instructorId: id});
 }
