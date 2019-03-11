@@ -1,13 +1,27 @@
-const axios = require('axios');
-const db = require('../database/dbConfig');
+const db = require('../../data/dbConfig');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-const { authenticate } = require('../auth/authenticate');
 
 module.exports = {
     register,
     login,
     getInstructors,
-    getInstructorById
+    // getUserById
+}
+
+async function register(instructor){
+    const [id] = await db('instructors').insert(instructor, 'id');
+    return db('instructors').where({id}).first();
+}
+
+function getInstructors(){
+    return db('instructors');
+}
+
+function login(username) {
+
+    return db('instructors')
+        .where({ username })
+        .first()
+
 }

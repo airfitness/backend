@@ -4,6 +4,7 @@ const jwtKey = process.env.JWT_SECRET;
 
 module.exports = {
   authenticate,
+  generateToken,
 };
 
 function authenticate(req, res, next) {
@@ -22,4 +23,17 @@ function authenticate(req, res, next) {
       error: 'No token provided, must be set on the Authorization Header',
     });
   }
+}
+
+function generateToken(user){
+  const payload = {
+      subject: user.id,
+      username: user.username,
+  }
+
+  const options = {
+      expiresIn: '1d'
+  }
+
+  return jwt.sign(payload, jwtKey, options);
 }

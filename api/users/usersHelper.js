@@ -8,7 +8,6 @@ module.exports = {
     register,
     login,
     getUsers,
-    generateToken,
     // getUserById
 }
 
@@ -20,19 +19,6 @@ async function register(user){
 function getUsers(){
     return db('users');
 }
-
-function generateToken(user){
-    const payload = {
-        subject: user.id,
-        username: user.username,
-    }
-  
-    const options = {
-        expiresIn: '1d'
-    }
-  
-    return jwt.sign(payload, jwtKey, options);
-  }
 
 function login(username) {
 

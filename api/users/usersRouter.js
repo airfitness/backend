@@ -27,7 +27,7 @@ router.post ('/login', (req, res) => {
    Users.login(creds.username)
     .then(user => {
         if (user && bcrypt.compareSync(creds.password, user.password)) {
-            const token = Users.generateToken(user);
+            const token = auth.generateToken(user);
             const { username, name, email, id } = user;
             res.status (200).json ({ username, name, email, id, token });
         } else {
