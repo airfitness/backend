@@ -5,11 +5,15 @@ module.exports = {
     // removeClass,
     // updateClass,
     getClasses,
-    // getClassById
+    getById,
 }
 
 function getClasses(){
     return db('classes');
+}
+
+function getById(id){
+    return db('classes').where({ id }).first();
 }
 
 async function addClass(nclass){

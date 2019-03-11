@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Classes = require('./classesHelper');
+const Instructor = require('../instructors/instructorsHelper');
 
 const { authenticate } = require('../auth/authenticate');
 
@@ -8,6 +9,21 @@ router.get('/', (req, res) => {
     Classes.getClasses()
         .then(classes => {
             res.status(200).json({ classes })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not get classes' })
+        })
+});
+
+router.get('/:id', (req, res) => {
+    Classes.getById(req.params.id)
+        .then(result => {
+            Instructor.getById(result.instructorId)
+                .then(instructor => {
+                    const { id, class_name, instructorId, times, price, location } = result;
+                    res.status(200).json({ id, class_name, instructorId, times, price, location, instructorName: instructor.name, instructorUsername: instructor.username })
+                })           
         })
         .catch(err => {
             console.log(err);
