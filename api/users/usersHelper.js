@@ -1,8 +1,4 @@
 const db = require('../../data/dbConfig');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-const jwtKey = process.env.JWT_SECRET;
 
 module.exports = {
     register,
