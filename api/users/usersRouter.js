@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../auth/authenticate');
+const { authenticate } = require('../auth/authenticate');
 const Users = require('./usersHelper');
 const bcrypt = require('bcryptjs');
 
@@ -47,6 +47,22 @@ router.get('/', (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ error: 'Could not get users' })
+        })
+});
+
+router.get('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    Users.getById(id)
+        .then(user => {
+            Users.getPunchCards(id)
+                .then(punchCards => {
+                    const { username, name, id, email } = user;
+                    res.status(200).json({ username, name, id, email, punchCards })
+                })            
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not get user' })
         })
 });
 

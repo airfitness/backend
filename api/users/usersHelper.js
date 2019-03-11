@@ -8,7 +8,8 @@ module.exports = {
     register,
     login,
     getUsers,
-    // getUserById
+    getById,
+    getPunchCards
 }
 
 async function register(user){
@@ -20,10 +21,16 @@ function getUsers(){
     return db('users');
 }
 
-function login(username) {
+function getById(id){
+    return db('users').where({ id }).first();
+}
 
+function login(username) {
     return db('users')
         .where({ username })
         .first()
+}
 
+function getPunchCards(id){
+    return db('punchCards').where({ userId: id })
 }

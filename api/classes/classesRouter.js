@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.post('/', (req, res) => {
+router.post('/', authenticate, (req, res) => {
     const nclass = req.body;
     if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
         res.status(400).json({ error: 'Class name, instructor, price, location and times are required' })
@@ -42,6 +42,25 @@ router.post('/', (req, res) => {
             })
             .catch(err => {
                 res.status(500).json({ error: 'Could not add class' })
+            })
+    }
+});
+
+router.post('/:id', authenticate, (req, res) => {
+    const pcCreds = req.body;
+    const classId = req.params.id;
+    if(!pcCreds.userId || !pcCreds.price || !pcCreds.instructorId){
+        res.status(400).json({ error: 'User ID, instructor ID and price required' })
+    } else {
+        Classes.newTransaction({...pcCreds, classId})
+            .then(transactionId => {
+                Classes.addPunch(pcCreds.userId, classId, transactionId[0] )
+                    .then(id => {
+                        res.status(201).json({ message: 'Punch card added!', id: id[0]})
+                    })
+            })
+            .catch(err => {
+                res.status(500).json({ error: 'Could not create punch card' })
             })
     }
 });
