@@ -8,14 +8,19 @@ module.exports = {
     getById,
     newTransaction,
     addPunch,
+    addType,
+    getClassTypes,
+    getTypes
 }
 
 function getClasses(){
     return db('classes');
 }
 
-function getById(id){
-    return db('classes').where({ id }).first();
+async function getById(id){
+    const types = await db('classesTypes').where( 'classId', id );
+    const resultClass = await db('classes').where({ id }).first();
+    return {...resultClass, types };
 }
 
 async function addClass(nclass){
@@ -28,5 +33,18 @@ function newTransaction(transaction){
 }
 
 function addPunch(userId, classId, transactionId){
-    return db('punchCards').insert({ userId, classId, transactionId });
+    return db('punchCards').insert({ userId, classId, transactionId }, 'id');
+}
+
+function addType(type, classId){
+    console.log('adding', type, classId);
+    return db('classesTypes').insert({ type, classId }, 'id');
+}
+
+function getClassTypes(id){
+    return db('classesTypes').where('classId', id);
+}
+
+function getTypes(){
+    return db('classesTypes');
 }
