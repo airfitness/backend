@@ -8,7 +8,13 @@ const { authenticate } = require('../auth/authenticate');
 router.get('/', (req, res) => {
     Classes.getClasses()
         .then(classes => {
-            res.status(200).json({ classes })
+            Promise.all(classes.map(async x => {
+                const types = await Classes.getClassTypes(x.id);
+                return {...x, types};
+            }))             
+            .then(classes => {
+                res.status(200).json({ classes })
+            })            
         })
         .catch(err => {
             console.log(err);
