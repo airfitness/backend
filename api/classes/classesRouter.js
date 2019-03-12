@@ -16,17 +16,6 @@ router.get('/', (req, res) => {
         })
 });
 
-router.get('/types', (req, res) => {
-    Classes.getTypes()
-        .then(types => {
-            res.status(200).json({ types })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: 'Could not get types' })
-        })
-});
-
 router.post('/:id/types', (req, res) => {
     const type = req.body.type;
     const classId = req.params.id;
@@ -44,6 +33,9 @@ router.get('/:id', (req, res) => {
     const id = req.params.id
     Classes.getById(id)
         .then(result => {
+            console.log(result);
+            !result.id ?
+            res.status(404).json({ error: 'Class does not exist' }) :
             Instructor.getById(result.instructorId)
                 .then(instructor => {
                             const { id, class_name, instructorId, times, price, location, types } = result;
@@ -82,7 +74,6 @@ router.post('/', authenticate, (req, res) => {
                                     Classes.addType(type, id);
                                 }))                          
                                 .then(nothing => {
-                                    console.log('something');
                                     Classes.getClassTypes(id)
                                         .then(t => {
                                             res.status(200).json({
@@ -123,6 +114,30 @@ router.post('/:id/punch', authenticate, (req, res) => {
                 res.status(500).json({ error: 'Could not create punch card' })
             })
     }
+});
+
+router.put('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    const item = req.body;
+    Classes.updateClass(id, item)
+        .then(updatedClass => {
+            res.status(200).json({ updatedClass })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'could not update class' })
+        })
+});
+
+router.delete('/:id', authenticate, (req, res) => {
+    Classes.removeClass(req.params.id)
+        .then(isRemoved => {
+            isRemoved ?
+            res.status(204).end()
+            : res.status(404).json({ error: 'Class does not exist' })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Could not remove class' })
+        })
 });
 
 module.exports = router;

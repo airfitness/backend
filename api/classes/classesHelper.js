@@ -2,8 +2,8 @@ const db = require('../../data/dbConfig');
 
 module.exports = {
     addClass,
-    // removeClass,
-    // updateClass,
+    removeClass,
+    updateClass,
     getClasses,
     getById,
     newTransaction,
@@ -47,4 +47,13 @@ function getClassTypes(id){
 
 function getTypes(){
     return db('classesTypes');
+}
+
+async function updateClass(id, item){
+    await db('classes').where({ id }).update(item);
+    return db('classes').where({id}).first();
+}
+
+function removeClass(id){
+    return db('classes').where({ id }).del();
 }
