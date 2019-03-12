@@ -13,9 +13,9 @@ exports.up = function(knex, Promise) {
         tbl.increments();
         tbl.string('class_name', 128).notNullable();
         tbl.integer('instructorId').unsigned().references('id').inTable('instructors').notNullable();
-        tbl.string('times').notNullable();
+        tbl.string('times', 255).notNullable();
         tbl.float('price').notNullable();
-        tbl.string('location').notNullable();
+        tbl.string('location', 255).notNullable();
         tbl.timestamp('createdAt').defaultTo(knex.fn.now());
       })
 };

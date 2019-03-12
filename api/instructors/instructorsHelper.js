@@ -5,19 +5,23 @@ module.exports = {
     login,
     getInstructors,
     getById,
-    getClasses
+    getClasses,
+    updateInstructor,
+    removeInstructor
 }
 
 async function register(instructor){
+    console.log(instructor);
     const [id] = await db('instructors').insert(instructor, 'id');
     return db('instructors').where({id}).first();
 }
 
 function getInstructors(){
-    return db('instructors');
+    return db('instructors').select('id', 'username', 'name', 'email', 'bio');
 }
 
 function login(username) {
+    console.log(username);
     return db('instructors')
         .where({ username })
         .first()
@@ -29,4 +33,13 @@ function getById(id){
 
 function getClasses(id){
     return db('classes').where({ instructorId: id});
+}
+
+async function updateInstructor(id, item){
+    await db('instructors').where({ id }).update(item);
+    return db('instructors').where({id}).first();
+}
+
+function removeInstructor(id){
+    return db('instructors').where({ id }).del();
 }
