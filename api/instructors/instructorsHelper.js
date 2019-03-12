@@ -11,15 +11,17 @@ module.exports = {
 }
 
 async function register(instructor){
+    console.log(instructor);
     const [id] = await db('instructors').insert(instructor, 'id');
     return db('instructors').where({id}).first();
 }
 
 function getInstructors(){
-    return db('instructors');
+    return db('instructors').select('id', 'username', 'name', 'email', 'bio');
 }
 
 function login(username) {
+    console.log(username);
     return db('instructors')
         .where({ username })
         .first()
