@@ -104,6 +104,7 @@ This repository contains the back-end and all associated server files for the Ai
 | users     | POST   | /api/users/login                   | Uses the credentials sent inside the `body` to authenticate the user. On successful login, returns a message with the `user` profile and a JSON Web Token token in the `body` of the response.|
 | users    | PUT    | /api/users/:id         | Updates a `user` in the database using the information sent inside the `body` of the request and returns a message with the updated `user` profile.                                            |
 | users    | DELETE | /api/users/:id         | Removes a `user` from the database using the id sent in the URL parameters of the response.                                                                                                    |
+| instructors | GET    | /api/instructors/:id        | Retrieves an array of `instructor` objects and returns a message with the array in the `body` of the response.                                                                                    |
 | instructors     | POST   | /api/instructors/register                | Creates a new `instructor` profile using the information sent inside the `body` of the request and returns a message along with the new `instructor` |
 | instructors     | POST   | /api/instructors/login                   | Uses the credentials sent inside the `body` to authenticate the instructor. On successful login, returns a message with the `instructor` profile and a JSON Web Token token in the `body` of the response.|
 | instructors    | PUT    | /api/instructors/:id         | Updates a `instructor` in the database using the information sent inside the `body` of the request and returns a message with the updated `instructor` profile.                                            |
@@ -373,7 +374,24 @@ _HTTP method:_ **[GET]**
             "times": "Sometime",
             "price": 100.29,
             "location": "somewhere",
-            "createdAt": "2019-03-12 17:01:47"
+            "createdAt": "2019-03-12 17:01:47",
+            "types": [
+                {
+                    "id": 1,
+                    "type": "other",
+                    "classId": 1
+                },
+                {
+                    "id": 2,
+                    "type": "cardio",
+                    "classId": 1
+                },
+                {
+                    "id": 3,
+                    "type": "dance",
+                    "classId": 1
+                }
+            ]
         },
         {
             "id": 2,
@@ -382,7 +400,8 @@ _HTTP method:_ **[GET]**
             "times": "Around noon",
             "price": 100.29,
             "location": "kansas",
-            "createdAt": "2019-03-12 17:29:07"
+            "createdAt": "2019-03-12 17:29:07",
+            "types": []
         }
     ]
 }
