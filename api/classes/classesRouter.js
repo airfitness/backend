@@ -74,6 +74,7 @@ router.post('/', authenticate, (req, res) => {
                                     Classes.addType(type, id);
                                 }))                          
                                 .then(nothing => {
+                                    console.log(nothing);
                                     Classes.getClassTypes(id)
                                         .then(t => {
                                             res.status(200).json({
@@ -88,7 +89,6 @@ router.post('/', authenticate, (req, res) => {
                                             })
                                         })
                                 })      
-
                             })
                         })           
             .catch(err => {

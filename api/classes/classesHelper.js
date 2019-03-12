@@ -36,9 +36,10 @@ function addPunch(userId, classId, transactionId){
     return db('punchCards').insert({ userId, classId, transactionId }, 'id');
 }
 
-function addType(type, classId){
+async function addType(type, classId){
     console.log('adding', type, classId);
-    return db('classesTypes').insert({ type, classId }, 'id');
+    const [id] = await db('classesTypes').insert({ type, classId });
+    return id;
 }
 
 function getClassTypes(id){
