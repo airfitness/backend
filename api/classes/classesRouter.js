@@ -31,6 +31,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
+// *** add class ***
 router.post('/', authenticate, (req, res) => {
     const nclass = req.body;
     if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
