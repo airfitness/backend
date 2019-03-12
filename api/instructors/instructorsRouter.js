@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../auth/authenticate');
+const { authenticate } = require('../auth/authenticate');
 const Instructors = require('./instructorsHelper');
 const bcrypt = require('bcryptjs');
 
@@ -67,4 +67,27 @@ router.get('/:id', (req, res) => {
         })
 });
 
+router.put('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    const item = req.body;
+    Instructors.updateInstructor(id, item)
+        .then(instructor => {
+            res.status(200).json({ instructor })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'could not update instructor' })
+        })
+});
+
+router.delete('/:id', authenticate, (req, res) => {
+    Instructor.removeInstructor(req.params.id)
+        .then(isRemoved => {
+            isRemoved ?
+            res.status(204).end()
+            : res.status(404).json({ error: 'Instructor does not exist' })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Could not remove instructor' })
+        })
+});
 module.exports = router;

@@ -5,7 +5,9 @@ module.exports = {
     login,
     getInstructors,
     getById,
-    getClasses
+    getClasses,
+    updateInstructor,
+    removeInstructor
 }
 
 async function register(instructor){
@@ -29,4 +31,13 @@ function getById(id){
 
 function getClasses(id){
     return db('classes').where({ instructorId: id});
+}
+
+async function updateInstructor(id, item){
+    await db('instructors').where({ id }).update(item);
+    return db('instructors').where({id}).first();
+}
+
+function removeInstructor(id){
+    return db('instructors').where({ id }).del();
 }
