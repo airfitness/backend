@@ -70,7 +70,7 @@ router.post('/', authenticate, (req, res) => {
                         Instructor.getById(newClass.instructorId)
                             .then(instructor => {
                                 Promise.all(types.map(type => {
-                                    console.log(type, id);
+                                    type = type.toLowerCase();
                                     Classes.addType(type, id);
                                 }))                          
                                 .then(nothing => {
