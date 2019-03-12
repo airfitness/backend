@@ -511,5 +511,3 @@ _HTTP method:_ **[PUT]**
 | --------------- | ------ | -------- | ------------------------ |
 | `Content-Type`  | String | Yes      | Must be application/json |
 | `Authorization` | String | Yes      | JSON Web Token           |
-
----
