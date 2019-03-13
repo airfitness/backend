@@ -427,7 +427,7 @@ _HTTP method:_ **[GET]**
 
 | name         | type    | required | description              |
 | ------------ | ------- | -------- | ------------------------ |
-| `id` | Integer | Yes      | ID of a specific workout |
+| `id` | Integer | Yes      | ID of a specific class |
 
 #### Response
 
