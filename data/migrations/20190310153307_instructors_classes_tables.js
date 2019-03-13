@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
         tbl.increments('id').primary();
         tbl.string('username', 128).unique().notNullable();
         tbl.string('name');
-        tbl.string('email', 128).unique().notNullable();  
+        tbl.string('email', 128).unique();  
         tbl.string('password', 255).notNullable();
         tbl.string('bio', 255);  
         tbl.string('priv', 128).notNullable().defaultTo('instructor');         
