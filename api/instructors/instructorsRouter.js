@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 
 router.post('/register', (req, res) => {
     let user = req.body;
-    if (!user.username || !user.password || !user.name) {
+    if (!user.username || !user.password ) {
         res.status (406).json ({error: 'Please provide username, full name, email and password'});
     }
     const hash = bcrypt.hashSync(user.password, 12);
