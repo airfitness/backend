@@ -74,7 +74,7 @@ router.post('/', authenticate, (req, res) => {
     } else if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
         res.status(400).json({ error: 'Class name, instructor, price, location and times are required' })
     } else {
-        const types = req.body.types ? req.body.types : ['other'];
+        const types = req.body.types ? req.body.types : [];
         Classes.addClass(nclass)
             .then(newClass => {
                 const { id, class_name, instructorId, times, price, location } = newClass;
