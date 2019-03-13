@@ -14,8 +14,8 @@ router.post('/register', (req, res) => {
 
     Instructors.register(user)
         .then (user => {
-            const { username, name, email, id } = user;
-            res.status (201).json({ username, name, email, id });
+            const { username, name, email, id, priv } = user;
+            res.status (201).json({ username, name, email, id, priv });
         })
         .catch (err => res.status (500).json ({error: 'Could not register instructor.' }));
 });
@@ -30,8 +30,8 @@ router.post ('/login', (req, res) => {
         console.log(user);
         if (user && bcrypt.compareSync(creds.password, user.password)) {
             const token = generateToken(user);
-            const { username, name, email, id } = user;
-            res.status(200).json({ username, name, email, id, token });
+            const { username, name, email, id, priv } = user;
+            res.status(200).json({ priv, username, name, email, id, token });
         } else {
             res.status (401).json ({ error: 'Bad credentials' });
         }
