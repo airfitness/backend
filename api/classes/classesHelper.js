@@ -10,7 +10,8 @@ module.exports = {
     addPunch,
     addType,
     getClassTypes,
-    getTypes
+    getTypes,
+    punchCard
 }
 
 function getClasses(){
@@ -56,4 +57,9 @@ async function updateClass(id, item){
 
 function removeClass(id){
     return db('classes').where({ id }).del();
+}
+
+async function punchCard(id){
+    const card = await db('punchCards').where({ id });
+    return await db('punchCards').where({ id }).update({ punches_available: card.punches_available - 1})
 }

@@ -66,7 +66,9 @@ router.get('/:id', (req, res) => {
 // *** add class ***
 router.post('/', authenticate, (req, res) => {
     const nclass = req.body.addedClass;
-    if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
+    if (req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to create a class' })
+    } else if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
         res.status(400).json({ error: 'Class name, instructor, price, location and times are required' })
     } else {
         const types = req.body.types ? req.body.types : ['other'];
@@ -106,7 +108,9 @@ router.post('/', authenticate, (req, res) => {
 router.post('/:id/punch', authenticate, (req, res) => {
     const pcCreds = req.body;
     const classId = req.params.id;
-    if(!pcCreds.userId || !pcCreds.price || !pcCreds.instructorId){
+    if (req.decoded.id !== pcCreds.userId && req.decoded.priv !== 'user') {
+        return res.status(401).json({ error: 'Unauthorized' })
+    } else if(!pcCreds.userId || !pcCreds.price || !pcCreds.instructorId){
         res.status(400).json({ error: 'User ID, instructor ID and price required' })
     } else {
         Classes.newTransaction({...pcCreds, classId})
@@ -125,6 +129,9 @@ router.post('/:id/punch', authenticate, (req, res) => {
 router.put('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     const item = req.body;
+    if (req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to update this class' })
+    }
     Classes.updateClass(id, item)
         .then(updatedClass => {
             res.status(200).json({ updatedClass })
@@ -134,8 +141,34 @@ router.put('/:id', authenticate, (req, res) => {
         })
 });
 
+//*** Punch it! Punch cards for class ***
+
+router.put('/:id/punchit', authenticate, (req, res) => {
+    const cards = req.body.cards;
+    const instructorId = req.body.instructorId;
+    if (instructorId !== req.decoded.id && req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to punch these cards' })
+    } else {
+        Promise.all(cards.map(card => {
+            Classes.punchCard(card);
+        }))
+        .then(empty => {
+            res.status(200).json({ message: 'Cards punched!' })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not punch cards' })
+        })
+    }
+    
+});
+
 router.delete('/:id', authenticate, (req, res) => {
-    Classes.removeClass(req.params.id)
+    const id = req.params.id;
+    if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to remove this class' })
+    }
+    Classes.removeClass(id)
         .then(isRemoved => {
             isRemoved ?
             res.status(204).end()
