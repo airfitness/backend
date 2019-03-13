@@ -22,6 +22,7 @@ function getById(id){
 }
 
 function login(username) {
+    console.log(username);
     return db('users')
         .where({ username })
         .first()

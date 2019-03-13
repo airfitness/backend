@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate } = require('../auth/authenticate');
+const { authenticate, generateToken } = require('../auth/authenticate');
 const Users = require('./usersHelper');
 const bcrypt = require('bcryptjs');
 
@@ -28,7 +28,7 @@ router.post ('/login', (req, res) => {
    Users.login(creds.username)
     .then(user => {
         if (user && bcrypt.compareSync(creds.password, user.password)) {
-            const token = auth.generateToken(user);
+            const token = generateToken(user);
             const { username, name, email, id, priv } = user;
             res.status (200).json ({ priv, username, name, email, id, token });
         } else {
@@ -36,7 +36,7 @@ router.post ('/login', (req, res) => {
         }
         })
         .catch (err => {
-        res.status (500).json ({error: 'Could not log in user' });
+        res.status (500).json ({error: 'Could not log in user', err: err.message });
         });
 });
 
@@ -53,6 +53,9 @@ router.get('/', (req, res) => {
 
 router.get('/:id', authenticate, (req, res) => {
     const id = req.params.id;
+    if (req.decoded.id !== id && req.decoded.priv !== 'user') {
+        return res.status(401).json({ error: 'You are not authorized' })
+    }
     Users.getById(id)
         .then(user => {
             Users.getPunchCards(id)
