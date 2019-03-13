@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate, generateToken } = require('../auth/authenticate');
-const Instructors = require('./instructorsHelper');
 const bcrypt = require('bcryptjs');
+
+const Instructors = require('./instructorsHelper');
+const Classes = require('../classes/classesHelper');
 
 router.post('/register', (req, res) => {
     let user = req.body;
@@ -58,7 +60,13 @@ router.get('/:id', (req, res) => {
             const { username, name, email, bio } = instructor;
             Instructors.getClasses(id)
                 .then(classes => {
-                    res.status(200).json({ username, name, email, bio, classes })
+                    Promise.all(classes.map(async x => {
+                        const types = await Classes.getClassTypes(x.id);
+                        return {...x, types};
+                    }))
+                    .then(nothing => {
+                        res.status(200).json({ username, name, email, bio, classes })
+                    })  
                 })            
         })
         .catch(err => {
