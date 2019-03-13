@@ -21,7 +21,6 @@ function getInstructors(){
 }
 
 function login(username) {
-    console.log(username);
     return db('instructors')
         .where({ username })
         .first()

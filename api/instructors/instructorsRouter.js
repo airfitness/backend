@@ -21,14 +21,13 @@ router.post('/register', (req, res) => {
 });
 
 router.post ('/login', (req, res) => {
-  const creds = req.body;
-    if(!creds.username || !creds.password){
+  const { username, password} = req.body;
+    if(!username || !password){
         res.status(400).json({ error: 'Please provide username and password'})
     }
-   Instructors.login(creds.username)
+   Instructors.login(username)
     .then(user => {
-        console.log(user);
-        if (user && bcrypt.compareSync(creds.password, user.password)) {
+        if (user && bcrypt.compareSync(password, user.password)) {
             const token = generateToken(user);
             const { username, name, email, id, priv } = user;
             res.status(200).json({ priv, username, name, email, id, token });
@@ -71,7 +70,6 @@ router.get('/:id', (req, res) => {
 router.put('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     const item = req.body;
-    console.log(req.decoded.priv);
     if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {
         return res.status(401).json({ error: 'You are not authorized to edit this account' })
     }
