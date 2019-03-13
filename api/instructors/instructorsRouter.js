@@ -71,16 +71,24 @@ router.get('/:id', (req, res) => {
 router.put('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     const item = req.body;
+    console.log(req.decoded.priv);
+    if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to edit this account' })
+    }
     Instructors.updateInstructor(id, item)
         .then(instructor => {
             res.status(200).json({ instructor })
         })
         .catch(err => {
-            res.status(500).json({ error: 'could not update instructor' })
+            res.status(500).json({ error: 'Could not update instructor' })
         })
 });
 
 router.delete('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {
+        return res.status(401).json({ error: 'You are not authorized to remove this account' })
+    }
     Instructor.removeInstructor(req.params.id)
         .then(isRemoved => {
             isRemoved ?

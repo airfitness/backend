@@ -29,6 +29,8 @@ function generateToken(user){
   const payload = {
       subject: user.id,
       username: user.username,
+      id: user.id,
+      priv: user.priv
   }
 
   const options = {
