@@ -61,7 +61,7 @@ function removeClass(id){
 }
 
 async function punchCard(id){
-    const card = await db('punchCards').where({ id });
+    const card = await db('punchCards').where({ id }).first();
     return await db('punchCards').where({ id }).update({ punches_available: card.punches_available - 1})
 }
 
