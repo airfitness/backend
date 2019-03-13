@@ -39,11 +39,12 @@ router.get('/:id', (req, res) => {
     const id = req.params.id
     Classes.getById(id)
         .then(result => {
-            console.log(result);
             !result.id ?
             res.status(404).json({ error: 'Class does not exist' }) :
             Instructor.getById(result.instructorId)
                 .then(instructor => {
+                    Classes.getCards(id)
+                        .then(cards => {
                             const { id, class_name, instructorId, times, price, location, types } = result;
                             res.status(200).json({
                                 id, class_name, 
@@ -53,9 +54,11 @@ router.get('/:id', (req, res) => {
                                 location, 
                                 instructorName: instructor.name,
                                 instructorUsername: instructor.username, 
-                                types
+                                types,
+                                cards
                             })
                         })
+                    })
                 })
         .catch(err => {
             console.log(err);
@@ -71,7 +74,7 @@ router.post('/', authenticate, (req, res) => {
     } else if(!nclass.class_name || !nclass.instructorId || !nclass.price || !nclass.location || !nclass.times){
         res.status(400).json({ error: 'Class name, instructor, price, location and times are required' })
     } else {
-        const types = req.body.types ? req.body.types : ['other'];
+        const types = req.body.types ? req.body.types : [];
         Classes.addClass(nclass)
             .then(newClass => {
                 const { id, class_name, instructorId, times, price, location } = newClass;

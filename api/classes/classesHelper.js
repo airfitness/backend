@@ -11,7 +11,8 @@ module.exports = {
     addType,
     getClassTypes,
     getTypes,
-    punchCard
+    punchCard,
+    getCards
 }
 
 function getClasses(){
@@ -60,6 +61,10 @@ function removeClass(id){
 }
 
 async function punchCard(id){
-    const card = await db('punchCards').where({ id });
+    const card = await db('punchCards').where({ id }).first();
     return await db('punchCards').where({ id }).update({ punches_available: card.punches_available - 1})
+}
+
+function getCards(classId){
+    return db('punchCards').where({ classId});
 }

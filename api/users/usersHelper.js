@@ -14,7 +14,7 @@ async function register(user){
 }
 
 function getUsers(){
-    return db('users');
+    return db('users').select('id', 'name', 'username', 'email');
 }
 
 function getById(id){
