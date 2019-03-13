@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
         tbl.string('name');
         tbl.string('email', 128).unique();  
         tbl.string('password', 255).notNullable();
-        tbl.string('bio', 510);  
+        tbl.text('bio');
         tbl.string('priv', 128).notNullable().defaultTo('instructor');         
         tbl.timestamp('createdAt').defaultTo(knex.fn.now());
       })
