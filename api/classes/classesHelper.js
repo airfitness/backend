@@ -12,7 +12,8 @@ module.exports = {
     getClassTypes,
     getTypes,
     punchCard,
-    getCards
+    getCards,
+    delType
 }
 
 function getClasses(){
@@ -42,7 +43,7 @@ async function addType(type, classId){
     return await db('classesTypes').insert({ type, classId });
 }
 
-function addType(id){
+function delType(id){
     return  db('classesTypes').where({ id }).del();
 }
 
