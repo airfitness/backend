@@ -5,8 +5,6 @@ const server = require('./server.js');
 describe('server.js', () => {
     afterEach(async () => {
         await db('instructors').truncate();
-        await db('classes').truncate();
-        await db('users').truncate();
      })
 
     it('should set testing env', () => {
@@ -45,6 +43,13 @@ describe('server.js', () => {
             const res = await request(server).get('/api/instructors');
         expect(res.type).toBe('application/json');
         });
+
+        it('should return 200 ok /instructors/:id', async () => {
+            const instr = ({ username: 'A new instructor', password: '1234' });
+            await request(server).post('/api/instructors/register').send(instr);
+            const res = await request(server).get('/api/instructors/1');
+            expect(res.status).toEqual(200);
+        });
     });
 
     describe('POST /instructors/register and login', () => {
@@ -53,12 +58,6 @@ describe('server.js', () => {
             const res = await request(server).post('/api/instructors/register').send(instr);
             expect(res.status).toEqual(201);
         });
-
-        // it('login should return a token', async () => {
-        //     const instr = ({ username: 'A new instructor', password: '1234' });
-        //     const res = await request(server).post('/api/instructors/login').send(instr);
-        //     expect(res.status).toBe(400);
-        // });
     });
 });
 
