@@ -149,8 +149,7 @@ router.put('/:id/punchit', authenticate, (req, res) => {
             console.log(err);
             res.status(500).json({ error: 'Could not punch cards' })
         })
-    }
-    
+    } 
 });
 
 // *** delete class ***

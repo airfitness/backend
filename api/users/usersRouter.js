@@ -70,4 +70,37 @@ router.get('/:id', authenticate, (req, res) => {
         })
 });
 
+//*** Update user ***/
+router.put('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    const item = req.body;
+    if (req.decoded.id !== id && req.decoded.priv !== 'user') {
+        return res.status(401).json({ error: 'You are not authorized to edit this account' })
+    }
+    Users.updateUser(id, item)
+        .then(user => {
+            res.status(200).json({ user })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Could not update user' })
+        })
+});
+
+//*** Delete User ***/
+router.delete('/:id', authenticate, (req, res) => {
+    const id = req.params.id;
+    if (req.decoded.id !== id && req.decoded.priv !== 'user') {
+        return res.status(401).json({ error: 'You are not authorized to remove this account' })
+    }
+    User.removeUser(req.params.id)
+        .then(isRemoved => {
+            isRemoved ?
+            res.status(204).end()
+            : res.status(404).json({ error: 'User does not exist' })
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Could not remove user' })
+        })
+});
+
 module.exports = router
