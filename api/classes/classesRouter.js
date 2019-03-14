@@ -185,7 +185,7 @@ router.post('/:id/types', (req, res) => {
 });
 
 router.delete('/:id/types', (req, res) => {
-    const typeId = req.params.body.typeId
+    const typeId = req.params.id;
     Classes.delType(typeId)
         .then(isDel => {
             isDel ?
