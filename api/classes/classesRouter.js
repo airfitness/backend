@@ -134,16 +134,14 @@ router.put('/:id', authenticate, (req, res) => {
 
 //*** Punch it! Punch cards for class ***
 router.put('/:id/punchit', authenticate, (req, res) => {
-    const cards = req.body.cards;
+    const card = req.body.card;
     const instructorId = req.body.instructorId;
     if (instructorId !== req.decoded.id && req.decoded.priv !== 'instructor') {
         return res.status(401).json({ error: 'You are not authorized to punch these cards' })
     } else {
-        Promise.all(cards.map(card => {
-            Classes.punchCard(card);
-        }))
-        .then(empty => {
-            res.status(200).json({ message: 'Cards punched!' })
+            Classes.punchCard(card)
+        .then(punchCard => {
+            res.status(200).json({ message: 'Cards punched!', punchCard })
         })
         .catch(err => {
             console.log(err);
