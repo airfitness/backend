@@ -64,7 +64,7 @@ router.get('/:id', (req, res) => {
                         const types = await Classes.getClassTypes(x.id);
                         return {...x, types};
                     }))
-                    .then(nothing => {
+                    .then(classes => {
                         res.status(200).json({ username, name, email, bio, classes })
                     })  
                 })            

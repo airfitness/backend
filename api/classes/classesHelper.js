@@ -39,8 +39,11 @@ function addPunch(userId, classId, transactionId){
 }
 
 async function addType(type, classId){
-    console.log('adding', type, classId);
     return await db('classesTypes').insert({ type, classId });
+}
+
+function addType(id){
+    return  db('classesTypes').where({ id }).del();
 }
 
 function getClassTypes(id){

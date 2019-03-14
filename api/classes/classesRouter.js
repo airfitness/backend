@@ -22,19 +22,6 @@ router.get('/', (req, res) => {
         })
 });
 
-router.post('/:id/types', (req, res) => {
-    const type = req.body.type;
-    const classId = req.params.id;
-    Classes.addType(type, classId)
-        .then(type => {
-            res.status(200).json({ type })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: 'Could not get types' })
-        })
-});
-
 router.get('/:id', (req, res) => {
     const id = req.params.id
     Classes.getById(id)
@@ -179,6 +166,36 @@ router.delete('/:id', authenticate, (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ error: 'Could not remove class' })
+        })
+});
+
+// *** types routes ***
+
+
+router.post('/:id/types', (req, res) => {
+    const type = req.body.type;
+    const classId = req.params.id;
+    Classes.addType(type, classId)
+        .then(type => {
+            res.status(200).json({ type })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not get types' })
+        })
+});
+
+router.delete('/:id/types', (req, res) => {
+    const typeId = req.params.body.typeId
+    Classes.delType(typeId)
+        .then(isDel => {
+            isDel ?
+            res.status(204).end()
+            : res.status(404).json({ error: 'Type does not exist' })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Could not get types' })
         })
 });
 
