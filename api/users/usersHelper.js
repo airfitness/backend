@@ -5,7 +5,9 @@ module.exports = {
     login,
     getUsers,
     getById,
-    getPunchCards
+    getPunchCards,
+    updateUser,
+    removeUser
 }
 
 async function register(user){
@@ -22,7 +24,6 @@ function getById(id){
 }
 
 function login(username) {
-    console.log(username);
     return db('users')
         .where({ username })
         .first()
@@ -30,4 +31,13 @@ function login(username) {
 
 function getPunchCards(id){
     return db('punchCards').where({ userId: id })
+}
+
+async function updateUser(id, item){
+    await db('user').where({ id }).update(item);
+    return db('user').where({id}).first();
+}
+
+function removeUser(id){
+    return db('users').where({ id }).del();
 }

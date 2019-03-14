@@ -41,8 +41,8 @@ This repository contains the back-end and all associated server files for the Ai
   "id": 1,                             // Integer (primary key provided by server and autoincrements)
   "username": "admin",                      // String, required
   "password": "password",                   // String, required
-  "name": "admin",                    // String, required
-  "email": "email@gmail.com"                // String, required
+  "name": "admin",                    // String
+  "email": "email@gmail.com"                // String
 }
 ```
 
@@ -53,9 +53,9 @@ This repository contains the back-end and all associated server files for the Ai
   "id": 1,                             // Integer (primary key provided by server and autoincrements)
   "username": "guy",                      // String, required
   "password": "password",                   // String, required
-  "name": "An instructor",                    // String, required
-  "bio": "A bio for instructor"             //string, required
-  "email": "email@gmail.com"                // String, required
+  "name": "An instructor",                    // String
+  "bio": "A bio for instructor"             //text
+  "email": "email@gmail.com"                // String
 }
 ```
 
@@ -69,6 +69,15 @@ This repository contains the back-end and all associated server files for the Ai
   "times": "Sometime",                  // string, required
   "price": 100.29,                      // float, required
   "location": "somewhere",              // string, required
+}
+```
+`classesTypes`
+
+```
+{
+  "id": 1,                             // Integer (primary key provided by server and autoincrements)
+  "classId": 1,                    // integer, foreign_key for 'id' in 'classes' table
+  "type": "cardio",                    // string, required
 }
 ```
 
@@ -104,7 +113,8 @@ This repository contains the back-end and all associated server files for the Ai
 | users     | POST   | /api/users/login                   | Uses the credentials sent inside the `body` to authenticate the user. On successful login, returns a message with the `user` profile and a JSON Web Token token in the `body` of the response.|
 | users    | PUT    | /api/users/:id         | Updates a `user` in the database using the information sent inside the `body` of the request and returns a message with the updated `user` profile.                                            |
 | users    | DELETE | /api/users/:id         | Removes a `user` from the database using the id sent in the URL parameters of the response.                                                                                                    |
-| instructors | GET    | /api/instructors/:id        | Retrieves an array of `instructor` objects and returns a message with the array in the `body` of the response.                                                                                    |
+| instructors | GET    | /api/instructors/      | Retrieves an array of `instructor` objects and returns a message with the array in the `body` of the response.                                                                                    |
+| instructors | GET    | /api/instructors/:id        | Retrieves an `instructor` object and returns a message with the obeject in the `body` of the response.                                                                                    |
 | instructors     | POST   | /api/instructors/register                | Creates a new `instructor` profile using the information sent inside the `body` of the request and returns a message along with the new `instructor` |
 | instructors     | POST   | /api/instructors/login                   | Uses the credentials sent inside the `body` to authenticate the instructor. On successful login, returns a message with the `instructor` profile and a JSON Web Token token in the `body` of the response.|
 | instructors    | PUT    | /api/instructors/:id         | Updates a `instructor` in the database using the information sent inside the `body` of the request and returns a message with the updated `instructor` profile.                                            |
@@ -113,10 +123,13 @@ This repository contains the back-end and all associated server files for the Ai
 | classes | GET    | /api/classes/:id      | Retrieves a single `classes` object using the id sent in the URL parameters of the request and returns a message with the object inside the `body` of the response.                            |
 | classes | POST    | /api/classes |  Uses the information sent inside the `body` to create a new `class` for a specified instructor by included `instructorId` and returns a message along with the new `class`.                           |
 | classes/punchCards/transactions | POST   | /api/classes/:id/punch          | Uses the information sent inside the `body` and classId of /:id to create a new `punchCard` and `transaction` for a specified user by included `userId` and returns a message along with the new id of `punchCard`.                           |
+| punchCards | POST   | /api/classes/:id/punchit          | Takes an array of `classId`s and decrements punches_available by 1 for each. Returns a message.                           |
 | classes | PUT    | /api/classes/:id      | Uses the information sent inside the `body` to update a single `class` using the id sent in the URL parameters of the request and returns a message along with the updated `class`.        |
 | classes | DELETE | /api/classes/:id      | Removes a `class` in the database using the id sent in the URL parameters of the request.                                                                                                    |
+| classesTypes | POST | /api/classes/:id/types      | Uses the information sent inside the `body` to adds a `type` in the database using the classId sent in the URL parameters of the request.                                                                                                    |
+| classes | DELETE | /api/classes/:id/types      | Removes a `type` in the database using the id sent in the URL parameters of the request.                                                                                                    |
 
-# AUTH ROUTES
+# USERS ROUTES
 
 ## **REGISTER**
 
@@ -438,28 +451,46 @@ _HTTP method:_ **[GET]**
 ```
 {
     "id": 1,
-    "class_name": "Another new class",
+    "class_name": "Yoga in the Park",
     "instructorId": 1,
     "times": "Sometime",
     "price": 100.29,
     "location": "somewhere",
-    "instructorName": "A new user",
-    "instructorUsername": "new",
+    "instructorName": "Richard Simmons",
+    "instructorUsername": "RichardSimmons",
     "types": [
         {
             "id": 1,
-            "type": "other",
+            "type": "yoga",
             "classId": 1
         },
         {
             "id": 2,
-            "type": "cardio",
+            "type": "strength",
             "classId": 1
         },
         {
             "id": 3,
-            "type": "dance",
+            "type": "stretching",
             "classId": 1
+        }
+    ],
+    "cards": [
+        {
+            "id": 1,
+            "userId": 1,
+            "classId": 1,
+            "transactionId": 1,
+            "punches_available": 10,
+            "createdAt": "2019-03-13T22:47:44.819Z"
+        },
+        {
+            "id": 3,
+            "userId": 2,
+            "classId": 1,
+            "transactionId": 3,
+            "punches_available": 10,
+            "createdAt": "2019-03-13T22:47:44.819Z"
         }
     ]
 }
