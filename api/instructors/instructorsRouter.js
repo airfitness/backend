@@ -75,6 +75,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
+//*** Update Instructor ***/
 router.put('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     const item = req.body;
@@ -90,6 +91,7 @@ router.put('/:id', authenticate, (req, res) => {
         })
 });
 
+//*** Delete Instructor ***/
 router.delete('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {

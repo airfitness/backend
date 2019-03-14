@@ -28,9 +28,9 @@ router.get('/:id', (req, res) => {
         .then(result => {
             !result.id ?
             res.status(404).json({ error: 'Class does not exist' }) :
-            Instructor.getById(result.instructorId)
+            Instructor.getById(result.instructorId) // Adds instructor data to response
                 .then(instructor => {
-                    Classes.getCards(id)
+                    Classes.getCards(id) // Adds related punch cards to response
                         .then(cards => {
                             const { id, class_name, instructorId, times, price, location, types } = result;
                             res.status(200).json({
@@ -67,12 +67,11 @@ router.post('/', authenticate, (req, res) => {
                 const { id, class_name, instructorId, times, price, location } = newClass;
                         Instructor.getById(newClass.instructorId)
                             .then(instructor => {
-                                Promise.all(types.map(type => {
+                                Promise.all(types.map(type => { // Maps over an array of types and inserts them individually
                                     type = type.toLowerCase();
                                     Classes.addType(type, id);
                                 }))                          
                                 .then(nothing => {
-                                    console.log(nothing);
                                     Classes.getClassTypes(id)
                                         .then(t => {
                                             res.status(200).json({
@@ -95,6 +94,7 @@ router.post('/', authenticate, (req, res) => {
     }
 });
 
+// *** Make a transaction and add a punch card ***
 router.post('/:id/punch', authenticate, (req, res) => {
     const pcCreds = req.body;
     const classId = req.params.id;
@@ -116,6 +116,7 @@ router.post('/:id/punch', authenticate, (req, res) => {
     }
 });
 
+// *** update class ***
 router.put('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     const item = req.body;
@@ -132,7 +133,6 @@ router.put('/:id', authenticate, (req, res) => {
 });
 
 //*** Punch it! Punch cards for class ***
-
 router.put('/:id/punchit', authenticate, (req, res) => {
     const cards = req.body.cards;
     const instructorId = req.body.instructorId;
@@ -153,6 +153,7 @@ router.put('/:id/punchit', authenticate, (req, res) => {
     
 });
 
+// *** delete class ***
 router.delete('/:id', authenticate, (req, res) => {
     const id = req.params.id;
     if (req.decoded.id !== id && req.decoded.priv !== 'instructor') {
@@ -170,7 +171,6 @@ router.delete('/:id', authenticate, (req, res) => {
 });
 
 // *** types routes ***
-
 
 router.post('/:id/types', (req, res) => {
     const type = req.body.type;
