@@ -181,7 +181,7 @@ router.post('/:id/types', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ error: 'Could not get types' })
+            res.status(500).json({ error: 'Could add type' })
         })
 });
 
@@ -195,7 +195,7 @@ router.delete('/:id/types', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ error: 'Could not get types' })
+            res.status(500).json({ error: 'Could not remove type' })
         })
 });
 
