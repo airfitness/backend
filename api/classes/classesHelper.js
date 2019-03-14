@@ -32,7 +32,7 @@ async function addClass(nclass){
 }
 
 function newTransaction(transaction){
-    return db('transactions').insert(transaction);
+    return db('transactions').insert(transaction, 'id');
 }
 
 function addPunch(userId, classId, transactionId){
