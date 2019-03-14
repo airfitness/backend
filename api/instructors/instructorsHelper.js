@@ -11,7 +11,6 @@ module.exports = {
 }
 
 async function register(instructor){
-    console.log(instructor);
     const [id] = await db('instructors').insert(instructor, 'id');
     return db('instructors').where({id}).first();
 }
