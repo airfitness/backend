@@ -127,7 +127,7 @@ This repository contains the back-end and all associated server files for the Ai
 | classes | PUT    | /api/classes/:id      | Uses the information sent inside the `body` to update a single `class` using the id sent in the URL parameters of the request and returns a message along with the updated `class`.        |
 | classes | DELETE | /api/classes/:id      | Removes a `class` in the database using the id sent in the URL parameters of the request.                                                                                                    |
 | classesTypes | POST | /api/classes/:id/types      | Uses the information sent inside the `body` to adds a `type` in the database using the classId sent in the URL parameters of the request.                                                                                                    |
-| classes | DELETE | /api/classes/:id/types      | Removes a `type` in the database using the id sent in the URL parameters of the request.                                                                                                    |
+| classesTypes | DELETE | /api/classes/:id/types      | Removes a `type` in the database using the id sent in the URL parameters of the request.                                                                                                    |
 
 # USERS ROUTES
 
@@ -186,7 +186,7 @@ _example:_
 
 ```
 {
-    "error": "Please provide username, full name, email and password"
+    "error": "Please provide username, and password"
 }
 ```
 
