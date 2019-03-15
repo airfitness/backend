@@ -34,8 +34,8 @@ function getPunchCards(id){
 }
 
 async function updateUser(id, item){
-    await db('user').where({ id }).update(item);
-    return db('user').where({id}).first();
+    await db('users').where({ id }).update(item);
+    return db('users').where({id}).first();
 }
 
 function removeUser(id){
